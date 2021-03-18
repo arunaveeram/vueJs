@@ -29,10 +29,10 @@ export default {
     };
   },
   beforeMount() {
-    this.getName();
+    this.getUsers();
   },
   methods: {
-    async getName() {
+    async getUsers() {
       try {
         const { data } = await axios.get(
           'https://jsonplaceholder.typicode.com/users'
