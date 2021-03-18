@@ -1,7 +1,15 @@
 <template>
-  <div id="app">
+  <div class="app">
     <h1>{{ msg }}</h1>
-    <ChildComponent v-bind:users="users" />
+    <section v-if="errored">
+      <p>
+        We're sorry, we're not able to retrieve this information at the moment,
+        please try back later
+      </p>
+    </section>
+    <section v-else>
+      <ChildComponent v-bind:users="users" />
+    </section>
   </div>
 </template>
 
@@ -9,29 +17,32 @@
 import ChildComponent from './ChildComponent.vue';
 import axios from 'axios';
 export default {
+  name: 'HelloWorld',
   components: {
     ChildComponent,
   },
   data() {
     return {
+      msg: 'Welcome to my first Vue.js implementation',
       users: [],
-      loading: true,
       errored: false,
     };
   },
-
-  mounted() {
-    axios
-      .get('https://jsonplaceholder.typicode.com/users')
-      .then((response) => {
-        this.users = response.data;
-        console.log('info', this.users);
-      })
-      .catch((error) => {
+  beforeMount() {
+    this.getName();
+  },
+  methods: {
+    async getName() {
+      try {
+        const { data } = await axios.get(
+          'https://jsonplaceholder.typicode.com/users'
+        );
+        this.users = data;
+      } catch (error) {
         console.log(error);
         this.errored = true;
-      })
-      .finally(() => (this.loading = false));
+      }
+    },
   },
 };
 </script>
