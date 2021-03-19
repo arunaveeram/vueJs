@@ -18,7 +18,7 @@ export default {
   props: ['name', 'id', 'username', 'email'],
   methods: {
     removeChild() {
-      this.$emit('removeUser', this.key + 1);
+      this.$emit('removeUser', this.key);
     },
   },
 };

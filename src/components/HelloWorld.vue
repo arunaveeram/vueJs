@@ -23,9 +23,13 @@
           :id="user.id"
           :username="user.username"
           :email="user.email"
-          v-on:removeUser="removeUser"
+          v-on:removeUser="removeUser(index, id)"
         />
       </table>
+
+      <button class="btn delete" v-on:click="addUser">
+        ADD
+      </button>
     </section>
   </div>
 </template>
@@ -40,6 +44,14 @@ export default {
   },
   data() {
     return {
+      newUser: [
+        {
+          id: 1,
+          name: 'Leanne Graham',
+          username: 'Bret',
+          email: 'Sincere@april.biz',
+        },
+      ],
       msg: 'Welcome to my first Vue.js implementation',
       users: [],
       errored: false,
@@ -49,6 +61,25 @@ export default {
     this.getUsers();
   },
   methods: {
+    async addUser(newUser) {
+      try {
+        const newData = await axios.post(
+          'https://jsonplaceholder.typicode.com/users/',
+          newUser
+        );
+        console.log(newData);
+        this.users.push({
+          id: 11,
+          name: 'Leanne Graham',
+          username: 'Bret',
+          email: 'Sincere@april.biz',
+        });
+      } catch (error) {
+        console.log(error);
+        this.errored = true;
+      }
+    },
+
     async getUsers() {
       try {
         const { data } = await axios.get(
@@ -66,11 +97,7 @@ export default {
           'https://jsonplaceholder.typicode.com/users/${id}'
         );
         console.log(result);
-        if (result.status === 200) {
-          this.users.splice(index + 1, 1);
-        } else {
-          console.log(result);
-        }
+        this.users.splice(index, 1);
       } catch (error) {
         console.log(error);
         this.errored = true;
