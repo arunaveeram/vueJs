@@ -8,7 +8,24 @@
       </p>
     </section>
     <section v-else>
-      <ChildComponent v-bind:users="users" />
+      <table style="width:100%">
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>UserName</th>
+          <th>Email</th>
+          <th>Delete user</th>
+        </tr>
+        <ChildComponent
+          v-for="(user, index) in users"
+          :key="index"
+          :name="user.name"
+          :id="user.id"
+          :username="user.username"
+          :email="user.email"
+          v-on:removeUser="removeUser"
+        />
+      </table>
     </section>
   </div>
 </template>
@@ -38,6 +55,22 @@ export default {
           'https://jsonplaceholder.typicode.com/users'
         );
         this.users = data;
+      } catch (error) {
+        console.log(error);
+        this.errored = true;
+      }
+    },
+    async removeUser(index) {
+      try {
+        const result = await axios.delete(
+          'https://jsonplaceholder.typicode.com/users/${id}'
+        );
+        console.log(result);
+        if (result.status === 200) {
+          this.users.splice(index + 1, 1);
+        } else {
+          console.log(result);
+        }
       } catch (error) {
         console.log(error);
         this.errored = true;

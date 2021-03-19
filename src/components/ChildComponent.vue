@@ -1,24 +1,26 @@
 <template>
-  <table style="width:100%">
-    <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>UserName</th>
-      <th>Email</th>
-    </tr>
-    <tr v-for="user in users" :key="user.name">
-      <th>{{ user.id }}</th>
-      <th>{{ user.name }}</th>
-      <th>{{ user.username }}</th>
-      <th>{{ user.email }}</th>
-    </tr>
-  </table>
+  <tr>
+    <th>{{ id }}</th>
+    <th>{{ name }}</th>
+    <th>{{ username }}</th>
+    <th>{{ email }}</th>
+    <th>
+      <button class="btn delete" v-on:click="removeChild">
+        Delete
+      </button>
+    </th>
+  </tr>
 </template>
 
 <script>
 export default {
   name: 'ChildComponent',
-  props: ['users'],
+  props: ['name', 'id', 'username', 'email'],
+  methods: {
+    removeChild() {
+      this.$emit('removeUser', this.key + 1);
+    },
+  },
 };
 </script>
 
